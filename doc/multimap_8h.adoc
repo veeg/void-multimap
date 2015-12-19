@@ -1,0 +1,331 @@
+= multimap.h API Documentation
+:source-highlighter: coderay
+
+== Functions
+
+== multimap_create
+
+[cols='h,5a']
+|===
+| Description
+| 
+Create a new, empty hashmap using the given comparison and hashing functions.         
+
+| Signature 
+|
+[source,C]
+----
+struct multimap* multimap_create (int(*cmpfunc)(const void *, const void *), unsigned long(*hashfunc)(const void *))
+----
+
+| Parameters
+|
+*in* `int(*)(const void *, const void *) cmpfunc`::
+Comparison function used to determine size relation of a pair of keys. 
+*in* `unsigned long(*)(const void *) hashfunc`::
+Hashing function used to map key into domain of long integers. 
+
+| Return
+| A new hashmap object, or NULL if allocation was unsuccessful.  
+
+|===
+
+== multimap_destroy
+
+[cols='h,5a']
+|===
+| Description
+| 
+Destroy the given hashmap.         
+
+| Signature 
+|
+[source,C]
+----
+void multimap_destroy (struct multimap *map, void(*destroy_key)(void *), void(*destroy_val)(void *))
+----
+
+| Parameters
+|
+*in* `struct multimap * map`::
+Hash map object. 
+*in* `void(*)(void *) destroy_key`::
+Destroy-function to be called on every key, or NULL. 
+*in* `void(*)(void *) destroy_val`::
+Destroy-function to be called on every value, or NULL. 
+
+| Return
+| void  
+
+|===
+
+== multimap_push_value
+
+[cols='h,5a']
+|===
+| Description
+| 
+Associate the given value with the given key.         
+
+| Signature 
+|
+[source,C]
+----
+int multimap_push_value (struct multimap *map, void *key, void *val)
+----
+
+| Parameters
+|
+*in* `struct multimap * map`::
+Hash map object. 
+*in* `void * key`::
+Key to be associated with given value. 
+*in* `void * val`::
+Value that given key will be associated with. 
+
+| Return
+| 0 if mapping was successful, else a non-zero value is returned.  
+
+| Details / Examples 
+|
+The multimap accepts multiple unique values per key. The values are stored in sorted order when inputted to the multimap.
+
+
+
+
+
+|===
+
+== multimap_get_first
+
+[cols='h,5a']
+|===
+| Description
+| 
+Get the first value associated with the given key.         
+
+| Signature 
+|
+[source,C]
+----
+void* multimap_get_first (struct multimap *map, void *key)
+----
+
+| Parameters
+|
+*in* `struct multimap * map`::
+Hash map object. 
+*in* `void * key`::
+Key used to identify a value in the hash map. 
+
+| Return
+| First value that key is associated with if mapping exists, else NULL.  
+
+| Details / Examples 
+|
+Retrieve the fist value pushed to the map with the given key.
+
+
+
+
+
+|===
+
+== multimap_fetch
+
+[cols='h,5a']
+|===
+| Description
+| 
+Get a value iterator for a given key.         
+
+| Signature 
+|
+[source,C]
+----
+struct multimap_value_iterator* multimap_fetch (struct multimap *map, void *key)
+----
+
+| Parameters
+|
+*in* `struct multimap * map`::
+Hash map object. 
+*in* `void * key`::
+Key used to identify a value in the hash map. 
+
+| Return
+| Iterator object for the given key.  
+
+| Details / Examples 
+|
+The value iterator holds all values associated with the given key in insertion order. Use 
+ to retrieve a value.
+
+
+
+
+
+|===
+
+== multimap_remove_value
+
+[cols='h,5a']
+|===
+| Description
+| 
+Get the value associated with the given key, and remove it from map.         
+
+| Signature 
+|
+[source,C]
+----
+void* multimap_remove_value (struct multimap *map, void *key, void(*free_key)(void *), void *value)
+----
+
+| Parameters
+|
+*in* `struct multimap * map`::
+Hash map object. 
+*in* `void * key`::
+Key used to identify a value in the hash map. 
+`void(*)(void *) free_key`::
+
+*in* `void * value`::
+Destroy-function that will be called on the key, or NULL. 
+
+| Return
+| Value that key is associated with if mapping exists, else NULL.  
+
+| Details / Examples 
+|
+If the given key isn't mapped with any given value, NULL is returned.
+
+
+
+
+
+|===
+
+== multimap_size
+
+[cols='h,5a']
+|===
+| Description
+| 
+Get number of elements in hash map.         
+
+| Signature 
+|
+[source,C]
+----
+int multimap_size (struct multimap *map)
+----
+
+| Parameters
+|
+*in* `struct multimap * map`::
+Hash map object. 
+
+| Return
+| Number of elements in hash map.  
+
+|===
+
+== multimap_contains_key
+
+[cols='h,5a']
+|===
+| Description
+| 
+Check how many values map contains for the given key.         
+
+| Signature 
+|
+[source,C]
+----
+int multimap_contains_key (struct multimap *map, void *key)
+----
+
+| Parameters
+|
+*in* `struct multimap * map`::
+Hash map object. 
+*in* `void * key`::
+Key for which to determine if a mapping exists. 
+
+| Return
+| Number of values stored with this key.  
+
+|===
+
+== multimap_iterator_next
+
+[cols='h,5a']
+|===
+| Description
+| 
+Retrieve the next value associated with the iterator.         
+
+| Signature 
+|
+[source,C]
+----
+void* multimap_iterator_next (struct multimap_value_iterator *iter)
+----
+
+| Parameters
+|
+*in* `struct multimap_value_iterator * iter`::
+Iterator associated with a given key 
+
+| Return
+| Value currently pointed to by the iterator  
+
+| Details / Examples 
+|
+The value returned MAY be destroyed between fetching the iterator and retrieving this value.
+
+
+
+
+
+|===
+
+== multimap_iterator_destroy
+
+[cols='h,5a']
+|===
+| Description
+| 
+Destroy the multimap value iterator.         
+
+| Signature 
+|
+[source,C]
+----
+int multimap_iterator_destroy (struct multimap_value_iterator *iter)
+----
+
+| Parameters
+|
+*in* `struct multimap_value_iterator * iter`::
+Multimap iterator object to destroy. 
+
+| Return
+| 0 if function invocation was successful, -1 if not.  
+
+| Details / Examples 
+|
+----
+res = multimap_iterator_destroy (iter);
+if (res != 0)
+  panic ("Destroying iterator failed!");
+
+----
+
+
+
+
+
+|===
+
