@@ -6,7 +6,6 @@ add_subdirectory (src)
 add_subdirectory (doc)
 
 enable_testing()
-add_custom_target (build_and_test ${CMAKE_CTEST_COMMAND} -v)
 add_subdirectory (test)
 
 
