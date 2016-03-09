@@ -16,7 +16,12 @@ $ cmake ..
 Run test by issuing the following command in your build folder. The tests require
 the CMocka C library installed.
 ----
-$ make build_and_test
+$ make test
+----
+
+To get verbose output if a test fails, use
+----
+$ ctest -V
 ----
 
 == Documentation
