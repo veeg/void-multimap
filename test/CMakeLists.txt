@@ -1,7 +1,7 @@
 
 find_library (cmocka NAMES multimap.a multimap)
 
-include_directories (${MULTIMAP_PUBLIC_INCLUDE_DIR})
+include_directories (${VOID-MULTIMAP_PUBLIC_INCLUDE_DIR})
 
 set (MULTIMAP_TESTSUITE_SOURCES
     "multimap_testsuite.c"
