@@ -321,6 +321,7 @@ multimap_remove_value(struct multimap *map, void *key, void (*free_key) (void *)
   unsigned long hash, idx;
   struct mapnode *tmp, **node;
 
+  map_value = NULL;
   hash = map->hashfunc (key);
   idx = hash % map->nbuckets;
   node = &map->buckets[idx];
